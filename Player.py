@@ -101,14 +101,14 @@ class NearestNeighborPlayer:
         player_value = game.calculateScore(player_hand)
         dealer_value = game.calculateScore(game.players[0])  # Assume only the dealer's visible card matters
 
-        # Calculate the difference between the player's hand value and the dealer's hand value
-        player_diff = abs(dealer_value - 21)
+        # Calculate the difference between the dealer's hand value and 21
+        deaker_diff_to_21 = abs(dealer_value - 21)
 
         # Calculate the difference between the player's hand value and 21
         player_diff_to_21 = abs(player_value - 21)
 
         # If hitting would not cause the player to bust and getting closer to 21 than the dealer, hit
-        if player_value < 21 and player_diff_to_21 > player_diff:
+        if player_value < 21 and player_diff_to_21 > deaker_diff_to_21:
             return "hit"
 
         # Otherwise, stand
