@@ -1,4 +1,3 @@
-import copy
 from copy import deepcopy
 import random as rand
 
@@ -32,8 +31,6 @@ class Game:
         # initalize the deck and shuffle 
         self.deck = self.initalizeDeck(decks)
         self.shuffleDeck()
-
-
 
     # initalizes the deck of cards using the number of decks
     # and shuffles the deck
@@ -272,7 +269,6 @@ class Game:
             scores.append(score)
             playerScores.append(score)
         
-        
         # Determine the winner(s)
         winners = []
         ties = []
@@ -293,7 +289,6 @@ class Game:
                         ties.append(0)
                         
                     ties.append(i)
-
 
             # No one beats the dealer
             if len(winners) == 0 and scores[0] <= 21 and len(ties) == 0:

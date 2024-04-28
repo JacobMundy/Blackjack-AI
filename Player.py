@@ -1,7 +1,5 @@
 import random as rand
 from Game import Game
-from copy import deepcopy
-# BlackJack Player Class
 
 # Dealer Class uses a basic strategy of hitting until the value 
 # of the hand is 17 or greater
@@ -38,7 +36,7 @@ class ManualPlayer:
                 print("Invalid move. Please try again.")
     
 # RandomPlayer Class randomly selects a move
-# 50/50
+# hit or stand with equal probability (50/50)
 class RandomPlayer:
     def __init__(self):
         self.hand = []
@@ -52,7 +50,8 @@ class RandomPlayer:
         else:
             return "stand"
 
-
+# CardCountingPlayer selects a move
+# based on basic card counting strategy
 class CardCountingPlayer:
     def __init__(self, num_decks):
         self.hand = []
@@ -90,9 +89,9 @@ class CardCountingPlayer:
         
         
      
-# Kind of a Nearest Neighbor algorithm I think? 
-# it compares the players hand to the dealer and a 21 value 
-# and "classifies" the hand as hit or stand
+# Type of a Nearest Neighbor algorithm
+# compares the players hand to the dealer and a 21 value 
+# "classifies" the hand as hit or stand
 class NearestNeighborPlayer:
     def __init__(self):
         pass
@@ -101,56 +100,32 @@ class NearestNeighborPlayer:
         player_value = game.calculateScore(player_hand)
         dealer_value = game.calculateScore(game.players[0])  # Assume only the dealer's visible card matters
 
-        # Calculate the difference between the player's hand value and the dealer's hand value
-        player_diff = abs(dealer_value - 21)
+        # Calculate the difference between the dealer's hand value and 21
+        deaker_diff_to_21 = abs(dealer_value - 21)
 
         # Calculate the difference between the player's hand value and 21
         player_diff_to_21 = abs(player_value - 21)
 
         # If hitting would not cause the player to bust and getting closer to 21 than the dealer, hit
-        if player_value < 21 and player_diff_to_21 > player_diff:
+        if player_value < 21 and player_diff_to_21 > deaker_diff_to_21:
             return "hit"
 
         # Otherwise, stand
         return "stand"
 
+# Minimax algorithm
+# recursively simulates game with a depth cutoff (by default 3)
+# decides which next move maximizes chances to win
 class MinimaxPlayer:
     def __init__(self, depth=3, player_num=1):
         self.depth = depth
         self.player_num = player_num
 
     def get_move(self, game, player_hand):
-        # Example usage of simulate_move
-        new_game_state = game.simulate_move("hit")  # Simulate a 'hit'
-        # Assess the new game state to decide the next move...
-
-        # Use some criteria or minimax logic here to determine the move
+        # Use minimax criteria here to determine the move
         return self.minimax(game.copy(), player_hand, self.depth)
 
-    # def minimax_decision(self, game, player_hand):
-    #     best_move = None
-    #     best_score = float('-inf')
-    #     legal_moves = self.get_legal_moves(game)
-
-    #     # Simulate each legal move and calculate the minimax score
-    #     for move in legal_moves:
-    #         # You need to update game state based on move, this part is missing
-    #         new_game_state = self.simulate_move(game, player_hand, move)
-    #         score = self.minimax(new_game_state, move, depth=10)  # Assuming depth starts at 3
-    #         if score > best_score:
-    #             best_score = score
-    #             best_move = move
-
-    #     return best_move
-
-    # def simulate_move(self, game, player_hand, move):
-    #     # Create a deep copy of the game state to modify
-    #     # Note: You'll need to ensure Game class supports cloning or copying
-    #     new_game_state = deepcopy(game)  # This requires 'from copy import deepcopy'
-    #     # Apply the move to the new game state
-    #     new_game_state.apply_move(player_hand, move)  # You need to implement this method in Game
-    #     return new_game_state
-
+    # recursive minimax algorithm with a set cutoff depth
     def minimax(self, game_state, move, depth):
         if depth == 0 or game_state.winner is not None:
             return self.evaluate(game_state)
@@ -204,12 +179,4 @@ class MinimaxPlayer:
 
     def get_legal_moves(self, game_state):
         moves = ['stand', 'hit']  # Basic moves available in every situation.
-
-        # Check conditions for double down or split (if your rules allow these moves)
-        # Example: Player can double down only on certain hand values (like 9, 10, 11).
-        # if game_state.can_double_down():
-        #     moves.append('double down')
-        # if game_state.can_split():
-        #     moves.append('split')
-
         return moves
