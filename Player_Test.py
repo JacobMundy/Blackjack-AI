@@ -4,22 +4,16 @@ import matplotlib.pyplot as plt
 # Test the Player class
 if __name__ == "__main__":
 
-    # [Dealer, Player 1, Player 2, ...]
+    # initialize players, game, and number of games
     players = [Dealer(), RandomPlayer(), MinimaxPlayer(player_num=2), NearestNeighborPlayer()]
-
     game = Game(len(players), decks=1)
-    # game.play_game(players)
-    
-    
-    # Test the multiGame function,
-    # multiGame(players, num_games, printOutput=True, againstDealer=True)
     num_games = 1000
     
-    # this is used later to plot the results
+    # Test the multiGame function, collect and plot the results
     wins = game.multiGame(players, num_games, againstDealer=True)
     print(wins)
     
-    # Define the data
+    # Declare and initialize the data
     player_names = [player.__class__.__name__ for player in players]
     player_wins = [0] * len(players)
     player_ties = [0] * len(players)
